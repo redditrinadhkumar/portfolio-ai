@@ -591,12 +591,14 @@ export default function HomePage() {
         <footer
           className="px-6 py-8 sm:px-12 text-center border-t border-[var(--color-border)]"
         >
-          <p className="text-xs text-moon">
-            {profile.personal.fullName} &middot; Built with Next.js &middot; Security-hardened, profile-grounded AI assistant
-          </p>
-          <p className="text-xs text-moon/40 mt-1">
-            All AI responses are grounded in the approved resume only. Defense-in-depth security — not claimed to be 100% jailbreak-proof.
-          </p>
+          <div className="mx-auto max-w-5xl space-y-1.5">
+            <p className="text-xs text-moon font-medium">
+              &copy; {new Date().getFullYear()} {profile.personal.fullName}. All rights reserved.
+            </p>
+            <p className="text-xs text-moon/50">
+              Designed &amp; Developed by {profile.personal.fullName} &middot; Powered by Next.js &amp; AI
+            </p>
+          </div>
         </footer>
       </main>
 
