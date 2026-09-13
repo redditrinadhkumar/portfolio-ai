@@ -1,0 +1,328 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Google Fonts integration point ─────────────────────────────────────────
+   Font families are loaded via next/font/google in layout.tsx and injected
+   as CSS custom properties. Tailwind fontFamily tokens reference these vars. */
+:root {
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Fira Code', monospace;
+
+  /* ── RGB channels for Tailwind utilities with opacity support ───────── */
+  --color-void-rgb: 7 9 26;
+  --color-surface-rgb: 15 22 41;
+  --color-surface-hi-rgb: 23 32 64;
+  --color-neon-rgb: 56 189 248;
+  --color-nebula-rgb: 129 140 248;
+  --color-starlight-rgb: 241 245 249;
+  --color-moon-rgb: 148 163 184;
+  --color-border-rgb: 255 255 255;
+
+  /* ── Design tokens (dark embedding-space theme) ────────────────────────── */
+  --color-void: #07091a;
+  --color-surface: #0f1629;
+  --color-surface-hi: #172040;
+  --color-neon: #38bdf8;
+  --color-nebula: #818cf8;
+  --color-starlight: #f1f5f9;
+  --color-moon: #94a3b8;
+  --color-border: rgba(255, 255, 255, 0.07);
+  --color-border-hi: rgba(56, 189, 248, 0.25);
+
+  /* ── Cursor-reactive hero glow position ───────────────────────────────── */
+  --mouse-x: 50%;
+  --mouse-y: 40%;
+
+  /* ── Card and glass surfaces ──────────────────────────────────────────── */
+  --glass-bg: rgba(15, 22, 41, 0.7);
+  --glass-bg-hover: rgba(23, 32, 64, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-border-hi: rgba(56, 189, 248, 0.25);
+
+  /* ── Navbar glass tokens ──────────────────────────────────────────────── */
+  --nav-glass-bg: rgba(7, 9, 26, 0.4);
+  --nav-glass-bg-scrolled: rgba(7, 9, 26, 0.6);
+  --nav-glass-border: rgba(255, 255, 255, 0.08);
+  --nav-glass-border-subtle: rgba(255, 255, 255, 0.04);
+}
+
+/* ── Light theme token overrides ─────────────────────────────────────────── */
+:root[data-theme="light"] {
+  /* ── RGB channels for Tailwind utilities in light mode ───────────────── */
+  --color-void-rgb: 248 250 252;
+  --color-surface-rgb: 255 255 255;
+  --color-surface-hi-rgb: 241 245 249;
+  --color-neon-rgb: 2 132 199;
+  --color-nebula-rgb: 99 102 241;
+  --color-starlight-rgb: 15 23 42;
+  --color-moon-rgb: 71 85 105;
+  --color-border-rgb: 15 23 42;
+
+  --color-void: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-hi: #f1f5f9;
+  --color-neon: #0284c7;       /* sky-600 — WCAG AA on white */
+  --color-nebula: #6366f1;     /* indigo-500 — WCAG AA on white */
+  --color-starlight: #0f172a;  /* slate-900 */
+  --color-moon: #475569;       /* slate-600 */
+  --color-border: rgba(15, 23, 42, 0.1);
+  --color-border-hi: rgba(2, 132, 199, 0.4);
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-hover: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-border-hi: rgba(2, 132, 199, 0.45);
+  --glass-specular: inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 2px 0 rgba(0, 0, 0, 0.02);
+  --glass-liquid-shadow: 0 20px 40px -15px rgba(31, 38, 135, 0.08), 0 2px 8px 0 rgba(15, 23, 42, 0.04);
+  --glass-liquid-shadow-hover: 0 28px 56px -12px rgba(2, 132, 199, 0.16), 0 4px 12px 0 rgba(31, 38, 135, 0.06);
+
+  /* ── Navbar glass tokens (light mode) ─────────────────────────────────── */
+  --nav-glass-bg: rgba(255, 255, 255, 0.45);
+  --nav-glass-bg-scrolled: rgba(255, 255, 255, 0.65);
+  --nav-glass-border: rgba(15, 23, 42, 0.08);
+  --nav-glass-border-subtle: rgba(15, 23, 42, 0.04);
+}
+
+/* ── Theme color-transition (smooth toggle, skip on initial load) ─────────── */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.2) transparent;
+}
+
+:root[data-theme="light"] {
+  scrollbar-color: rgba(2, 132, 199, 0.3) transparent;
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-starlight);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+:root[data-theme="light"] body {
+  background-color: #f8fafc;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 10%, rgba(99, 102, 241, 0.07) 0px, transparent 45%),
+    radial-gradient(at 50% 50%, rgba(168, 85, 247, 0.05) 0px, transparent 50%),
+    radial-gradient(at 90% 90%, rgba(56, 189, 248, 0.09) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* ── Scrollbar (WebKit) ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(2, 132, 199, 0.25);
+}
+
+/* ── Focus ring ──────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-neon);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Selection ───────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(56, 189, 248, 0.25);
+  color: #fff;
+}
+
+:root[data-theme="light"] ::selection {
+  background: rgba(2, 132, 199, 0.2);
+  color: var(--color-starlight);
+}
+
+/* ── Gradient text utility ───────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-nebula) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glassmorphic card ───────────────────────────────────────────────────── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--glass-border-hi);
+  background: var(--glass-bg-hover);
+}
+
+:root[data-theme="light"] .glass-card {
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--glass-specular), var(--glass-liquid-shadow);
+}
+
+:root[data-theme="light"] .glass-card:hover {
+  border-color: rgba(2, 132, 199, 0.45);
+  box-shadow: var(--glass-specular), var(--glass-liquid-shadow-hover);
+}
+
+/* ── Hero cursor-reactive glow ──────────────────────────────────────────── */
+.hero-glow-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 700px 500px at var(--mouse-x) var(--mouse-y),
+    rgba(56, 189, 248, 0.06) 0%,
+    rgba(129, 140, 248, 0.04) 40%,
+    transparent 70%
+  );
+  transition: background 0.1s ease;
+}
+
+:root[data-theme="light"] .hero-glow-overlay {
+  background: radial-gradient(
+    ellipse 700px 500px at var(--mouse-x) var(--mouse-y),
+    rgba(2, 132, 199, 0.05) 0%,
+    rgba(99, 102, 241, 0.04) 40%,
+    transparent 70%
+  );
+}
+
+/* ── Project card tilt ───────────────────────────────────────────────────── */
+.project-card {
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
+}
+
+/* ── Nav active indicator ────────────────────────────────────────────────── */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-neon), var(--color-nebula));
+  border-radius: 9999px;
+  transition: width 0.25s ease;
+}
+
+.nav-link.active { color: var(--color-neon); }
+.nav-link.active::after { width: 100%; }
+
+/* ── Timeline connector ──────────────────────────────────────────────────── */
+.timeline-line {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--color-neon) 20%,
+    var(--color-nebula) 80%,
+    transparent 100%
+  );
+}
+
+/* ── Chat widget (uses legacy light-theme for contrast on dark bg) ───────── */
+.chat-scroll::-webkit-scrollbar { width: 6px; }
+.chat-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(56, 189, 248, 0.2);
+  border-radius: 999px;
+}
+
+/* ── Section fade-in (scroll-reveal) ─────────────────────────────────────── */
+.section-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-hidden {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+/* ── Reduced-motion overrides ─────────────────────────────────────────────
+   Applied AFTER all animation declarations so specificity wins. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Canvas is hidden entirely when motion is reduced */
+  #embedding-canvas {
+    display: none !important;
+  }
+
+  /* Tilt effect disabled */
+  .project-card {
+    transform: none !important;
+  }
+
+  /* Scroll-reveal disabled */
+  .section-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ── Skill node animations ───────────────────────────────────────────────── */
+@keyframes node-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.skill-node {
+  animation: node-float 4s ease-in-out infinite;
+}
+
+/* Stagger via nth-child (1 through 8) */
+.skill-node:nth-child(2) { animation-delay: 0.3s; }
+.skill-node:nth-child(3) { animation-delay: 0.6s; }
+.skill-node:nth-child(4) { animation-delay: 0.9s; }
+.skill-node:nth-child(5) { animation-delay: 1.2s; }
+.skill-node:nth-child(6) { animation-delay: 1.5s; }
+.skill-node:nth-child(7) { animation-delay: 1.8s; }
+.skill-node:nth-child(8) { animation-delay: 2.1s; }
+
+/* ── Section fade-in utility ─────────────────────────────────────────────── */
+.section-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section-hidden {
+  opacity: 0;
+  transform: translateY(24px);
+}
