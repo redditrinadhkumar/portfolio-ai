@@ -223,9 +223,10 @@ export function ChatPanel({ messages, isLoading, errorBanner, onSend, onReset, o
           }}
           rows={1}
           placeholder="Ask about experience, skills, projects…"
-          className="flex-1 resize-none rounded-xl px-3 py-2 text-sm placeholder:text-moon/60 focus:outline-none transition-colors border border-[var(--color-border)] bg-surface-hi text-starlight"
+          className="flex-1 resize-none rounded-xl px-3 py-2 text-sm placeholder:text-moon/60 focus:outline-none transition-colors border border-[var(--color-border)] bg-surface-hi"
           style={{
             maxHeight: '96px',
+            color: '#0f172a',
           }}
         />
         <button
